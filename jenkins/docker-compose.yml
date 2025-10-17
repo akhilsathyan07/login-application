@@ -1,20 +1,15 @@
-version: '3.8'
-
 services:
   jenkins:
-    build: .
-    container_name: jenkins
+    image: jenkins/jenkins:lts
     privileged: true
     user: root
     ports:
-      - "8085:8080"      # Jenkins UI
-      - "50000:50000"    # Agent port
+      - "8085:8080"
+      - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
-    restart: unless-stopped
-
+      - /usr/local/bin/docker:/usr/local/bin/docker
+      - /usr/bin/docker-compose:/usr/bin/docker-compose
 volumes:
   jenkins_home:
