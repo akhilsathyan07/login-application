@@ -1,20 +1,20 @@
-version: "3.8"
+version: '3.8'
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build: .
     container_name: jenkins
-    restart: unless-stopped
+    privileged: true
+    user: root
     ports:
-      - "8085:8080"   # Jenkins UI now available on http://localhost:8085
-      - "50000:50000" # For Jenkins agent connections
+      - "8085:8080"      # Jenkins UI
+      - "50000:50000"    # Agent port
     volumes:
       - jenkins_home:/var/jenkins_home
-    user: "0"  # Run as root to avoid permission issues (safe for local dev)
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    restart: unless-stopped
 
 volumes:
   jenkins_home:
-    driver: local
-
